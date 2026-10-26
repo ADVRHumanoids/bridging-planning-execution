@@ -360,3 +360,7 @@ pre.bibtex {
 .equal-contrib {
   margin-top: 0.15rem;
 }
+
+.publication-authors .author-block + .author-block {
+  margin-left: 0.25rem;
+}
