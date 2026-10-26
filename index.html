@@ -187,77 +187,46 @@
       attempts to guide validation and recovery.
     </p>
 
-    <div class="component">
-      <div class="columns is-vcentered">
-        <div class="column is-5">
-          <img src="./static/images/component_scene_graph.png"
-               alt="Scene graph with object list, spatial relationships, side accessibility and reachability, and end-effector states.">
-        </div>
-        <div class="column is-7 content">
-          <h3 class="title is-5">1. Structured scene representation</h3>
+    <div class="columns is-multiline mt-4">
+      <div class="column is-half">
+        <div class="module-card">
+          <h4><span class="module-num">1</span>Structured scene representation</h4>
           <p>
-            A VLM identifies the objects, their attributes (e.g., fragility), pairwise relations
-            (<em>on top of</em>, <em>right of</em>, <em>in front of</em>, <em>grasped by</em>), and the
-            state of the end-effectors. Estimated object poses then ground this graph geometrically:
-            each side of every object is labelled as accessible or blocked, together with the object
-            responsible for the obstruction, and as reachable or not by each arm.
+            A VLM identifies objects, attributes (e.g., fragility), pairwise relations, and the state
+            of the end-effectors. Object poses ground the graph geometrically: each side of every
+            object is labelled as accessible or blocked (and by what), and as reachable or not by
+            each arm.
           </p>
         </div>
       </div>
-    </div>
-
-    <div class="component">
-      <div class="columns is-vcentered">
-        <div class="column is-5">
-          <img src="./static/images/component_planning.png"
-               alt="Manipulation planning: the task instruction and the resulting sequential plan of actions.">
-        </div>
-        <div class="column is-7 content">
-          <h3 class="title is-5">2. Execution-aware manipulation planning</h3>
+      <div class="column is-half">
+        <div class="module-card">
+          <h4><span class="module-num">2</span>Execution-aware manipulation planning</h4>
           <p>
-            A VLM turns the instruction into a sequence of actions, each specifying
-            <em>what</em> to do and <em>how</em>: the primitive (grasp, place, push, release), the
+            A VLM turns the instruction into a sequence of actions specifying the primitive, the
             target, the arm(s), whether the claw is engaged, and the side from which to interact.
-            When the target is not directly graspable, the planner reasons about the recorded causes
-            of obstruction and relocates the blocking objects first.
+            When the target is not directly graspable, the blocking objects are relocated first.
           </p>
         </div>
       </div>
-    </div>
-
-    <div class="component">
-      <div class="columns is-vcentered">
-        <div class="column is-5">
-          <img src="./static/images/component_scheduling.png"
-               alt="Scheduling: actions grouped into parallel stages, each with pre-conditions and post-conditions.">
-        </div>
-        <div class="column is-7 content">
-          <h3 class="title is-5">3. Parallel bimanual scheduling</h3>
+      <div class="column is-half">
+        <div class="module-card">
+          <h4><span class="module-num">3</span>Parallel bimanual scheduling</h4>
           <p>
             Compatible actions are grouped into stages executed concurrently by the two arms. Each
-            stage carries a local goal and explicit pre- and post-conditions, expressed as atomic
-            predicates that can be verified independently. The stage becomes the unit of
-            supervision for validation and recovery.
+            stage carries a local goal and explicit pre- and post-conditions, expressed as atomic,
+            independently verifiable predicates.
           </p>
         </div>
       </div>
-    </div>
-
-    <!-- TODO: replace with the crop of the new validation figure (repeat / modify / replan). -->
-    <div class="component">
-      <div class="columns is-vcentered">
-        <div class="column is-5">
-          <img src="./static/images/component_validation.png"
-               alt="Validation: pre-condition and post-condition checks around the execution of each stage.">
-        </div>
-        <div class="column is-7 content">
-          <h3 class="title is-5">4. Hierarchical validation &amp; recovery</h3>
+      <div class="column is-half">
+        <div class="module-card">
+          <h4><span class="module-num">4</span>Hierarchical validation &amp; recovery</h4>
           <p>
-            Before and after each stage, a VLM classifies every condition as <em>satisfied</em>,
-            <em>uncertain</em>, or <em>violated</em>. Uncertain outcomes trigger additional
-            perception before any failure is declared. Confirmed failures are interpreted using the
-            observed scene transition and the history of previous attempts, and resolved by the
-            least disruptive strategy, from local recovery to global replanning.
+            Each condition is classified as <em>satisfied</em>, <em>uncertain</em>, or
+            <em>violated</em>. Uncertain outcomes trigger additional perception; confirmed failures
+            are interpreted using the scene transition and the attempt history, and resolved from
+            local recovery to global replanning.
           </p>
         </div>
       </div>
@@ -275,11 +244,12 @@
         progressively larger portions of the pipeline.
       </p>
     </div>
-    <div class="columns">
+    <div class="narrow">
+    <video class="clip" autoplay muted loop playsinline preload="metadata">
+      <source src="./static/videos/clip_recovery.mp4" type="video/mp4">
+    </video>
+    <div class="columns is-mobile recovery-text mt-2">
       <div class="column recovery-card">
-        <video class="clip" autoplay muted loop playsinline preload="metadata">
-          <source src="./static/videos/clip_recovery_repeat.mp4" type="video/mp4">
-        </video>
         <p class="recovery-name">Repeat</p>
         <p class="recovery-scenario">Bottle Failure</p>
         <p class="recovery-desc">
@@ -288,9 +258,6 @@
         </p>
       </div>
       <div class="column recovery-card">
-        <video class="clip" autoplay muted loop playsinline preload="metadata">
-          <source src="./static/videos/clip_recovery_modify.mp4" type="video/mp4">
-        </video>
         <p class="recovery-name">Modify</p>
         <p class="recovery-scenario">Push Failure</p>
         <p class="recovery-desc">
@@ -299,9 +266,6 @@
         </p>
       </div>
       <div class="column recovery-card">
-        <video class="clip" autoplay muted loop playsinline preload="metadata">
-          <source src="./static/videos/clip_recovery_replan.mp4" type="video/mp4">
-        </video>
         <p class="recovery-name">Replan</p>
         <p class="recovery-scenario">Stacked Boxes w/ Failure</p>
         <p class="recovery-desc">
@@ -309,6 +273,7 @@
           current scene, taking the reported failure into account.
         </p>
       </div>
+    </div>
     </div>
   </div>
 </section>
@@ -343,63 +308,31 @@
         the required manipulation strategy.
       </p>
     </div>
-    <video class="clip mb-5" autoplay muted loop playsinline preload="metadata">
+    <video class="clip narrow mb-4" autoplay muted loop playsinline preload="metadata">
       <source src="./static/videos/clip_all_scenarios.mp4" type="video/mp4">
     </video>
-    <div class="columns is-multiline is-mobile mt-4">
-      <div class="column is-one-third-tablet is-half-mobile scenario-card">
-        <img src="./static/images/scenario_stacked_boxes.jpg" alt="Stacked Boxes scenario">
-        <p class="scenario-tag">Execution-aware planning</p>
-        <p class="scenario-name">Stacked Boxes</p>
-        <p class="scenario-desc">A box rests on top of the target.</p>
+    <div class="columns scenario-list">
+      <div class="column">
+        <p class="scenario-group-label">Execution-aware planning</p>
+        <dl>
+          <dt>Stacked Boxes</dt><dd>A box rests on top of the target.</dd>
+          <dt>Boxes Aside</dt><dd>Objects beside the target block its lateral sides.</dd>
+          <dt>Bottles on Box</dt><dd>Two bottles rest on top of the target.</dd>
+          <dt>Fragile Box</dt><dd>Obstacles on the target include a fragile box.</dd>
+          <dt>Long Horizon</dt><dd>Several stacked and adjacent obstacles must be cleared.</dd>
+        </dl>
       </div>
-      <div class="column is-one-third-tablet is-half-mobile scenario-card">
-        <img src="./static/images/scenario_boxes_aside.jpg" alt="Boxes Aside scenario">
-        <p class="scenario-tag">Execution-aware planning</p>
-        <p class="scenario-name">Boxes Aside</p>
-        <p class="scenario-desc">Objects placed beside the target block its lateral sides.</p>
-      </div>
-      <div class="column is-one-third-tablet is-half-mobile scenario-card">
-        <img src="./static/images/scenario_bottles_on_box.jpg" alt="Bottles on Box scenario">
-        <p class="scenario-tag">Execution-aware planning</p>
-        <p class="scenario-name">Bottles on Box</p>
-        <p class="scenario-desc">Two bottles rest on top of the target.</p>
-      </div>
-      <div class="column is-one-third-tablet is-half-mobile scenario-card">
-        <img src="./static/images/scenario_fragile_box.jpg" alt="Fragile Box scenario">
-        <p class="scenario-tag">Execution-aware planning</p>
-        <p class="scenario-name">Fragile Box</p>
-        <p class="scenario-desc">Obstacles on the target include a fragile box.</p>
-      </div>
-      <div class="column is-one-third-tablet is-half-mobile scenario-card">
-        <img src="./static/images/scenario_long_horizon.jpg" alt="Long Horizon scenario">
-        <p class="scenario-tag">Execution-aware planning</p>
-        <p class="scenario-name">Long Horizon</p>
-        <p class="scenario-desc">Several stacked and adjacent obstacles must be cleared.</p>
-      </div>
-      <div class="column is-one-third-tablet is-half-mobile scenario-card">
-        <img src="./static/images/scenario_scene_update.jpg" alt="Scene Update scenario">
-        <p class="scenario-tag">Dynamic scene adaptation</p>
-        <p class="scenario-name">Scene Update</p>
-        <p class="scenario-desc">Place the ball on the blue box while keeping the top of the white box clear; a bottle placed on the white box during execution violates the plan and triggers replanning.</p>
-      </div>
-      <div class="column is-one-third-tablet is-half-mobile scenario-card">
-        <img src="./static/images/scenario_bottle_failure.jpg" alt="Bottle Failure scenario">
-        <p class="scenario-tag">Execution recovery</p>
-        <p class="scenario-name">Bottle Failure</p>
-        <p class="scenario-desc">Pick up the bottle under an injected execution failure.</p>
-      </div>
-      <div class="column is-one-third-tablet is-half-mobile scenario-card">
-        <img src="./static/images/scenario_push_failure.jpg" alt="Push Failure scenario">
-        <p class="scenario-tag">Execution recovery</p>
-        <p class="scenario-name">Push Failure</p>
-        <p class="scenario-desc">Move the red box away from the white box under an injected push failure.</p>
-      </div>
-      <div class="column is-one-third-tablet is-half-mobile scenario-card">
-        <img src="./static/images/scenario_stacked_boxes.jpg" alt="Stacked Boxes with Failure scenario">
-        <p class="scenario-tag">Execution recovery</p>
-        <p class="scenario-name">Stacked Boxes w/ Failure</p>
-        <p class="scenario-desc">Same layout as Stacked Boxes, with the grasp of the obstacle systematically prevented.</p>
+      <div class="column">
+        <p class="scenario-group-label">Dynamic scene adaptation</p>
+        <dl>
+          <dt>Scene Update</dt><dd>Place the ball on the blue box while keeping the top of the white box clear; a bottle placed on the white box during execution triggers replanning.</dd>
+        </dl>
+        <p class="scenario-group-label">Execution recovery</p>
+        <dl>
+          <dt>Bottle Failure</dt><dd>Pick up the bottle under an injected execution failure.</dd>
+          <dt>Push Failure</dt><dd>Move the red box away from the white box under an injected push failure.</dd>
+          <dt>Stacked Boxes w/ Failure</dt><dd>The grasp of the obstacle is systematically prevented.</dd>
+        </dl>
       </div>
     </div>
   </div>
