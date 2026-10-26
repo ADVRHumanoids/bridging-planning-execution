@@ -105,6 +105,82 @@ video.project-video {
   background: #000;
 }
 
+video.clip {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+  background: #000;
+}
+
+.tldr {
+  border-left: 4px solid var(--accent);
+  background: var(--soft);
+  border-radius: 0 6px 6px 0;
+  padding: 1rem 1.25rem;
+  font-size: 1.08rem;
+  line-height: 1.6;
+}
+
+.stat-line {
+  border-top: 1px solid var(--rule);
+  padding-top: 0.75rem;
+  color: var(--muted);
+}
+
+.stat-line strong {
+  color: var(--accent);
+  font-size: 1.15rem;
+}
+
+.component {
+  margin-top: 2.5rem;
+}
+
+.component img {
+  width: auto;
+  max-width: 100%;
+  max-height: 340px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+}
+
+.component .title.is-5 {
+  font-family: 'Google Sans', 'Noto Sans', sans-serif;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+
+.recovery-card video.clip {
+  aspect-ratio: 640 / 900;
+  object-fit: cover;
+}
+
+.recovery-card .recovery-name {
+  font-family: 'Google Sans', 'Noto Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--accent);
+  margin-top: 0.6rem;
+}
+
+.recovery-card .recovery-scenario {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.recovery-card .recovery-desc {
+  font-size: 0.93rem;
+  line-height: 1.5;
+  margin-top: 0.3rem;
+}
+
 .publication-video {
   position: relative;
   width: 100%;

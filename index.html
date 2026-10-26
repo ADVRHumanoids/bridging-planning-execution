@@ -69,20 +69,30 @@
   </div>
 </section>
 
-<!-- ============================== TEASER ============================== -->
+<!-- ============================== VIDEO ============================== -->
+<section class="section pt-0" id="video">
+  <div class="container is-max-desktop">
+    <video class="project-video" controls preload="metadata" playsinline
+           poster="./static/images/video_poster.jpg">
+      <source src="./static/videos/video.mp4" type="video/mp4">
+      Your browser does not support embedded videos.
+      <a href="./static/videos/video.mp4">Download the video</a>.
+    </video>
+  </div>
+</section>
+
+<!-- ============================== TL;DR ============================== -->
 <section class="section pt-0">
   <div class="container is-max-desktop">
-    <figure class="paper-figure teaser-figure">
-      <img src="./static/images/teaser.jpg"
-           alt="CENTAURO retrieving a white box from a cluttered table: initial scene, final scene, and the four framework stages (scene perception, manipulation planning, parallel scheduling, validation and recovery).">
-    </figure>
-    <p class="figure-caption teaser-caption">
-      <strong>Execution-aware target retrieval in clutter.</strong> Given the instruction
-      &ldquo;Grasp the white box&rdquo;, the framework builds a structured scene representation,
-      plans the manipulation actions and their physical realisation, and schedules compatible
-      actions for parallel bimanual execution. A hierarchical validator monitors each execution
-      stage and uses structured feedback to support local recovery or targeted replanning.
-    </p>
+    <div class="tldr">
+      <p>
+        <strong>TL;DR</strong> &mdash; A zero-shot VLM framework for bimanual manipulation in
+        clutter that reasons not only about <em>what</em> objects are, but about <em>how</em> they can
+        physically be reached. Each execution stage is validated against explicit pre- and
+        post-conditions, so that failures are recovered locally whenever possible and the plan is
+        revised only when needed.
+      </p>
+    </div>
   </div>
 </section>
 
@@ -124,21 +134,40 @@
   </div>
 </section>
 
-<!-- ============================== VIDEO ============================== -->
-<section class="section" id="video">
+<!-- ============================== PROBLEM ============================== -->
+<section class="section">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Video</h2>
-    <video class="project-video" controls preload="metadata" playsinline
-           poster="./static/images/video_poster.jpg">
-      <source src="./static/videos/video.mp4" type="video/mp4">
-      Your browser does not support embedded videos.
-      <a href="./static/videos/video.mp4">Download the video</a>.
-    </video>
-    <p class="figure-caption">
-      Overview of the framework and of the real-world experiments on CENTAURO, including the
-      execution-aware planning scenarios and the recovery strategies (repeat, modify, replan) in
-      the failure scenarios. Robot motions are shown accelerated where indicated.
-    </p>
+    <h2 class="title is-3 has-text-centered">Why Execution Awareness?</h2>
+    <div class="columns is-vcentered">
+      <div class="column is-7">
+        <video class="clip" autoplay muted loop playsinline preload="metadata">
+          <source src="./static/videos/clip_execution_aware_vs_not.mp4" type="video/mp4">
+        </video>
+        <p class="figure-caption">
+          <em>Boxes Aside</em>, instruction &ldquo;Grasp the white box&rdquo;. Left: execution-aware
+          planner. Right: planner using only symbolic object relations.
+        </p>
+      </div>
+      <div class="column is-5">
+        <div class="content">
+          <p>
+            Symbolic relations such as <em>right of</em> describe where objects are, but not whether
+            the robot can actually reach them. When a box stands right next to the target, a planner
+            that only sees these relations does not recognise it as an obstruction and attempts the
+            grasp directly.
+          </p>
+          <p>
+            Our scene representation annotates every side of every object with its
+            <strong>accessibility</strong> (is there enough free space for the end-effector?) and
+            <strong>reachability</strong> (is there a kinematically feasible approach?). The planner
+            can then detect the blocking object and relocate it first.
+          </p>
+          <p class="stat-line">
+            Boxes Aside success rate: <strong>0%</strong> &rarr; <strong>85%</strong>
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -148,63 +177,137 @@
     <h2 class="title is-3 has-text-centered">Method</h2>
     <figure class="paper-figure">
       <img src="./static/images/pipeline.png"
-           alt="Overview of the pipeline: scene perception, manipulation planning, scheduling into parallel stages, and hierarchical validation and recovery with repeat, modify and replan strategies.">
+           alt="Overview of the pipeline: scene perception, manipulation planning, scheduling into parallel stages, and validation.">
     </figure>
     <p class="figure-caption">
       <strong>Pipeline overview.</strong> From an RGB observation and object poses and dimensions,
       the framework constructs a structured scene representation, generates a sequential
       manipulation plan, and groups compatible actions into parallel execution stages. The
       validator checks stage-level pre- and post-conditions and maintains a history of execution
-      attempts to guide validation and recovery. When replanning is required, it returns
-      structured feedback describing the failed stage and the interpreted cause of failure to the
-      planner (dashed connection).
+      attempts to guide validation and recovery.
     </p>
 
-    <div class="columns is-multiline mt-5">
-      <div class="column is-half">
-        <div class="module-card">
-          <h4>Structured scene representation</h4>
+    <div class="component">
+      <div class="columns is-vcentered">
+        <div class="column is-5">
+          <img src="./static/images/component_scene_graph.png"
+               alt="Scene graph with object list, spatial relationships, side accessibility and reachability, and end-effector states.">
+        </div>
+        <div class="column is-7 content">
+          <h3 class="title is-5">1. Structured scene representation</h3>
           <p>
-            A VLM identifies objects, their attributes and pairwise relations, and the state of the
-            end-effectors. Object poses ground this graph geometrically: each side of every object
-            is annotated with its <em>accessibility</em> (enough free space for the end-effector, and
-            what blocks it otherwise) and its <em>reachability</em> (a feasible inverse-kinematics
-            solution).
+            A VLM identifies the objects, their attributes (e.g., fragility), pairwise relations
+            (<em>on top of</em>, <em>right of</em>, <em>in front of</em>, <em>grasped by</em>), and the
+            state of the end-effectors. Estimated object poses then ground this graph geometrically:
+            each side of every object is labelled as accessible or blocked, together with the object
+            responsible for the obstruction, and as reachable or not by each arm.
           </p>
         </div>
       </div>
-      <div class="column is-half">
-        <div class="module-card">
-          <h4>Execution-aware manipulation planning</h4>
+    </div>
+
+    <div class="component">
+      <div class="columns is-vcentered">
+        <div class="column is-5">
+          <img src="./static/images/component_planning.png"
+               alt="Manipulation planning: the task instruction and the resulting sequential plan of actions.">
+        </div>
+        <div class="column is-7 content">
+          <h3 class="title is-5">2. Execution-aware manipulation planning</h3>
           <p>
-            A VLM generates a sequence of actions, each specifying the primitive, the target, the
-            arm(s), the contact modality, and the side from which to interact. When the target is
-            not directly graspable, the planner reasons about the recorded causes of obstruction
-            and relocates the blocking objects.
+            A VLM turns the instruction into a sequence of actions, each specifying
+            <em>what</em> to do and <em>how</em>: the primitive (grasp, place, push, release), the
+            target, the arm(s), whether the claw is engaged, and the side from which to interact.
+            When the target is not directly graspable, the planner reasons about the recorded causes
+            of obstruction and relocates the blocking objects first.
           </p>
         </div>
       </div>
-      <div class="column is-half">
-        <div class="module-card">
-          <h4>Parallel bimanual scheduling</h4>
+    </div>
+
+    <div class="component">
+      <div class="columns is-vcentered">
+        <div class="column is-5">
+          <img src="./static/images/component_scheduling.png"
+               alt="Scheduling: actions grouped into parallel stages, each with pre-conditions and post-conditions.">
+        </div>
+        <div class="column is-7 content">
+          <h3 class="title is-5">3. Parallel bimanual scheduling</h3>
           <p>
             Compatible actions are grouped into stages executed concurrently by the two arms. Each
             stage carries a local goal and explicit pre- and post-conditions, expressed as atomic
-            predicates that can be verified independently.
+            predicates that can be verified independently. The stage becomes the unit of
+            supervision for validation and recovery.
           </p>
         </div>
       </div>
-      <div class="column is-half">
-        <div class="module-card">
-          <h4>Hierarchical validation &amp; recovery</h4>
+    </div>
+
+    <!-- TODO: replace with the crop of the new validation figure (repeat / modify / replan). -->
+    <div class="component">
+      <div class="columns is-vcentered">
+        <div class="column is-5">
+          <img src="./static/images/component_validation.png"
+               alt="Validation: pre-condition and post-condition checks around the execution of each stage.">
+        </div>
+        <div class="column is-7 content">
+          <h3 class="title is-5">4. Hierarchical validation &amp; recovery</h3>
           <p>
-            Each condition is classified as <em>satisfied</em>, <em>uncertain</em>, or
-            <em>violated</em>. Uncertain outcomes trigger additional perception before any failure
-            is declared. Confirmed failures are interpreted using the scene transition and the
-            history of previous attempts, and resolved by <em>repeat</em>, <em>modify</em>, or
-            <em>replan</em>, from local to global.
+            Before and after each stage, a VLM classifies every condition as <em>satisfied</em>,
+            <em>uncertain</em>, or <em>violated</em>. Uncertain outcomes trigger additional
+            perception before any failure is declared. Confirmed failures are interpreted using the
+            observed scene transition and the history of previous attempts, and resolved by the
+            least disruptive strategy, from local recovery to global replanning.
           </p>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== RECOVERY ============================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Recovery in Action</h2>
+    <div class="content has-text-centered">
+      <p>
+        Failures are deliberately injected during execution. The three strategies re-invoke
+        progressively larger portions of the pipeline.
+      </p>
+    </div>
+    <div class="columns">
+      <div class="column recovery-card">
+        <video class="clip" autoplay muted loop playsinline preload="metadata">
+          <source src="./static/videos/clip_recovery_repeat.mp4" type="video/mp4">
+        </video>
+        <p class="recovery-name">Repeat</p>
+        <p class="recovery-scenario">Bottle Failure</p>
+        <p class="recovery-desc">
+          Execution made progress but did not complete: the scene is perceived again and the stage
+          is re-executed unchanged.
+        </p>
+      </div>
+      <div class="column recovery-card">
+        <video class="clip" autoplay muted loop playsinline preload="metadata">
+          <source src="./static/videos/clip_recovery_modify.mp4" type="video/mp4">
+        </video>
+        <p class="recovery-name">Modify</p>
+        <p class="recovery-scenario">Push Failure</p>
+        <p class="recovery-desc">
+          No progress, but the failure is attributable to an action attribute: an Action Revision
+          VLM revises the arm, contact, or side, and the stage is re-executed.
+        </p>
+      </div>
+      <div class="column recovery-card">
+        <video class="clip" autoplay muted loop playsinline preload="metadata">
+          <source src="./static/videos/clip_recovery_replan.mp4" type="video/mp4">
+        </video>
+        <p class="recovery-name">Replan</p>
+        <p class="recovery-scenario">Stacked Boxes w/ Failure</p>
+        <p class="recovery-desc">
+          The stage is no longer applicable: planning and scheduling are re-invoked from the
+          current scene, taking the reported failure into account.
+        </p>
       </div>
     </div>
   </div>
@@ -240,7 +343,9 @@
         the required manipulation strategy.
       </p>
     </div>
-
+    <video class="clip mb-5" autoplay muted loop playsinline preload="metadata">
+      <source src="./static/videos/clip_all_scenarios.mp4" type="video/mp4">
+    </video>
     <div class="columns is-multiline is-mobile mt-4">
       <div class="column is-one-third-tablet is-half-mobile scenario-card">
         <img src="./static/images/scenario_stacked_boxes.jpg" alt="Stacked Boxes scenario">
@@ -282,16 +387,16 @@
         <img src="./static/images/scenario_bottle_failure.jpg" alt="Bottle Failure scenario">
         <p class="scenario-tag">Execution recovery</p>
         <p class="scenario-name">Bottle Failure</p>
-        <p class="scenario-desc">Retrieve the bottle under an injected execution failure.</p>
+        <p class="scenario-desc">Pick up the bottle under an injected execution failure.</p>
       </div>
       <div class="column is-one-third-tablet is-half-mobile scenario-card">
         <img src="./static/images/scenario_push_failure.jpg" alt="Push Failure scenario">
         <p class="scenario-tag">Execution recovery</p>
         <p class="scenario-name">Push Failure</p>
-        <p class="scenario-desc">Retrieve the white box under an injected push failure.</p>
+        <p class="scenario-desc">Move the red box away from the white box under an injected push failure.</p>
       </div>
       <div class="column is-one-third-tablet is-half-mobile scenario-card">
-        <img src="./static/images/scenario_stacked_boxes.jpg" alt="Stacked Boxes w/ Failure scenario">
+        <img src="./static/images/scenario_stacked_boxes.jpg" alt="Stacked Boxes with Failure scenario">
         <p class="scenario-tag">Execution recovery</p>
         <p class="scenario-name">Stacked Boxes w/ Failure</p>
         <p class="scenario-desc">Same layout as Stacked Boxes, with the grasp of the obstacle systematically prevented.</p>
@@ -358,9 +463,9 @@
         </li>
         <li>
           <strong>Hierarchical validation makes recovery cheaper.</strong> A binary validator must
-          always replan after a failure. Interpreting the failure allows the least disruptive
-          recovery, reducing the average queries from 10 to 8.1 in Bottle Failure (repeat) and from
-          10 to 9.1 in Push Failure (modify).
+          always replan after a failure (3 queries), whereas repeat and modify require 1 and 2
+          queries. This reduces the average queries from 10 to 8.1 in Bottle Failure and from 10 to
+          9.1 in Push Failure.
         </li>
         <li>
           <strong>Parallel scheduling shortens execution.</strong> Grouping compatible actions into
