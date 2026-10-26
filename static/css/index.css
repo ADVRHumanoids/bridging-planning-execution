@@ -356,3 +356,7 @@ pre.bibtex {
   margin-left: auto;
   margin-right: auto;
 }
+
+.equal-contrib {
+  margin-top: 0.15rem;
+}
