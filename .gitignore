@@ -1,0 +1,4 @@
+.DS_store
+.idea
+# Uncompressed source video (exceeds GitHub's 100 MB limit); the site uses static/videos/video.mp4.
+static/videos/Video_Final.mp4

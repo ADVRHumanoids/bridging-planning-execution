@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+        content="A zero-shot vision-language framework for execution-aware bimanual manipulation that jointly reasons about task objectives and physical feasibility, with hierarchical validation and recovery.">
+  <meta name="keywords" content="bimanual manipulation, vision-language models, task planning, execution validation, humanoid robots, CENTAURO">
+  <title>Bridging Task Planning and Execution for Language-Conditioned Bimanual Manipulation</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+</head>
+<body>
+
+<!-- ============================== HEADER ============================== -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title">
+            Bridging Task Planning and Execution for<br class="is-hidden-mobile">
+            <span class="nowrap">Language-Conditioned</span> Bimanual Manipulation
+          </h1>
+
+          <!-- TODO: replace with the final author list and links. -->
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Author One<sup>1</sup>,</span>
+            <span class="author-block">Author Two<sup>1</sup>,</span>
+            <span class="author-block">Author Three<sup>1</sup></span>
+          </div>
+          <!-- TODO: replace with the final affiliations. -->
+          <div class="is-size-6 publication-authors">
+            <span class="author-block"><sup>1</sup>Affiliation</span>
+          </div>
+          <!-- TODO: confirm the venue. -->
+          <div class="is-size-6 publication-venue">Humanoids 2026</div>
+
+          <div class="publication-links">
+            <!-- TODO: point to static/paper.pdf once the final PDF is added, then remove is-placeholder. -->
+            <span class="link-block">
+              <a href="./static/paper.pdf" class="button is-dark is-rounded is-placeholder">
+                <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                <span>Paper</span>
+              </a>
+            </span>
+            <!-- TODO: add the arXiv link, then remove is-placeholder. -->
+            <span class="link-block">
+              <a href="#" class="button is-dark is-rounded is-placeholder">
+                <span class="icon"><i class="ai ai-arxiv"></i></span>
+                <span>arXiv</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="#video" class="button is-dark is-rounded">
+                <span class="icon"><i class="fas fa-video"></i></span>
+                <span>Video</span>
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== TEASER ============================== -->
+<section class="section pt-0">
+  <div class="container is-max-desktop">
+    <figure class="paper-figure teaser-figure">
+      <img src="./static/images/teaser.jpg"
+           alt="CENTAURO retrieving a white box from a cluttered table: initial scene, final scene, and the four framework stages (scene perception, manipulation planning, parallel scheduling, validation and recovery).">
+    </figure>
+    <p class="figure-caption teaser-caption">
+      <strong>Execution-aware target retrieval in clutter.</strong> Given the instruction
+      &ldquo;Grasp the white box&rdquo;, the framework builds a structured scene representation,
+      plans the manipulation actions and their physical realisation, and schedules compatible
+      actions for parallel bimanual execution. A hierarchical validator monitors each execution
+      stage and uses structured feedback to support local recovery or targeted replanning.
+    </p>
+  </div>
+</section>
+
+<!-- ============================== ABSTRACT ============================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-left">
+          <p>
+            Robots are increasingly expected to execute natural-language manipulation tasks in
+            real-world environments. This is particularly relevant in household assistance and
+            logistics, where clutter requires reasoning about both task objectives and execution
+            feasibility. This challenge becomes even more pronounced for bimanual humanoid
+            platforms, where coordinating two manipulators introduces additional interaction and
+            kinematic constraints.
+          </p>
+          <p>
+            We present a zero-shot vision-language framework for execution-aware bimanual
+            manipulation that jointly reasons about task objectives and physical feasibility.
+            Planning is grounded in a structured scene representation that combines semantic object
+            relations with execution constraints, enabling the selection of obstacle relocations and
+            execution choices while preserving task semantics. Compatible actions are organised into
+            parallel bimanual stages with explicit pre- and post-conditions. A hierarchical validator
+            evaluates these conditions under perceptual uncertainty and uses stage-level execution
+            history to support local recovery or targeted replanning.
+          </p>
+          <p>
+            Experiments on the CENTAURO hybrid wheeled-legged humanoid robot across nine
+            language-conditioned manipulation scenarios show higher task success than an
+            execution-agnostic baseline. Dedicated failure scenarios further show that structured
+            validation feedback supports effective recovery from execution failures. These results
+            demonstrate the benefits of combining execution reasoning directly into task planning.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== VIDEO ============================== -->
+<section class="section" id="video">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Video</h2>
+    <video class="project-video" controls preload="metadata" playsinline
+           poster="./static/images/video_poster.jpg">
+      <source src="./static/videos/video.mp4" type="video/mp4">
+      Your browser does not support embedded videos.
+      <a href="./static/videos/video.mp4">Download the video</a>.
+    </video>
+    <p class="figure-caption">
+      Overview of the framework and of the real-world experiments on CENTAURO, including the
+      execution-aware planning scenarios and the recovery strategies (repeat, modify, replan) in
+      the failure scenarios. Robot motions are shown accelerated where indicated.
+    </p>
+  </div>
+</section>
+
+<!-- ============================== METHOD ============================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Method</h2>
+    <figure class="paper-figure">
+      <img src="./static/images/pipeline.png"
+           alt="Overview of the pipeline: scene perception, manipulation planning, scheduling into parallel stages, and hierarchical validation and recovery with repeat, modify and replan strategies.">
+    </figure>
+    <p class="figure-caption">
+      <strong>Pipeline overview.</strong> From an RGB observation and object poses and dimensions,
+      the framework constructs a structured scene representation, generates a sequential
+      manipulation plan, and groups compatible actions into parallel execution stages. The
+      validator checks stage-level pre- and post-conditions and maintains a history of execution
+      attempts to guide validation and recovery. When replanning is required, it returns
+      structured feedback describing the failed stage and the interpreted cause of failure to the
+      planner (dashed connection).
+    </p>
+
+    <div class="columns is-multiline mt-5">
+      <div class="column is-half">
+        <div class="module-card">
+          <h4>Structured scene representation</h4>
+          <p>
+            A VLM identifies objects, their attributes and pairwise relations, and the state of the
+            end-effectors. Object poses ground this graph geometrically: each side of every object
+            is annotated with its <em>accessibility</em> (enough free space for the end-effector, and
+            what blocks it otherwise) and its <em>reachability</em> (a feasible inverse-kinematics
+            solution).
+          </p>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="module-card">
+          <h4>Execution-aware manipulation planning</h4>
+          <p>
+            A VLM generates a sequence of actions, each specifying the primitive, the target, the
+            arm(s), the contact modality, and the side from which to interact. When the target is
+            not directly graspable, the planner reasons about the recorded causes of obstruction
+            and relocates the blocking objects.
+          </p>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="module-card">
+          <h4>Parallel bimanual scheduling</h4>
+          <p>
+            Compatible actions are grouped into stages executed concurrently by the two arms. Each
+            stage carries a local goal and explicit pre- and post-conditions, expressed as atomic
+            predicates that can be verified independently.
+          </p>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="module-card">
+          <h4>Hierarchical validation &amp; recovery</h4>
+          <p>
+            Each condition is classified as <em>satisfied</em>, <em>uncertain</em>, or
+            <em>violated</em>. Uncertain outcomes trigger additional perception before any failure
+            is declared. Confirmed failures are interpreted using the scene transition and the
+            history of previous attempts, and resolved by <em>repeat</em>, <em>modify</em>, or
+            <em>replan</em>, from local to global.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== EXAMPLE ============================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Example Execution</h2>
+    <figure class="paper-figure">
+      <img src="./static/images/timeline_fragile_box.png"
+           alt="Execution timeline of the Fragile Box scenario: push of the blue box, placement of the fragile green box on the table, and final grasp of the white box.">
+    </figure>
+    <p class="figure-caption">
+      <strong>Fragile Box.</strong> The task is to grasp the white box. The robot identifies the
+      blue and green boxes as obstacles placed on top of the target. Since they are laterally too
+      close to be grasped directly, the robot first pushes the non-fragile blue box from its
+      accessible <em>front</em> side, the most suitable direction for clearing the target. It then
+      grasps and places the fragile green box on the table. Once both obstacles have been removed,
+      the robot grasps the white box.
+    </p>
+  </div>
+</section>
+
+<!-- ============================== SCENARIOS ============================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Experimental Scenarios</h2>
+    <div class="content has-text-centered">
+      <p>
+        Nine tabletop scenarios on the CENTAURO platform, each evaluated over 20 executions.
+        The robot receives only a short instruction, without information about the obstacles or
+        the required manipulation strategy.
+      </p>
+    </div>
+
+    <div class="columns is-multiline is-mobile mt-4">
+      <div class="column is-one-third-tablet is-half-mobile scenario-card">
+        <img src="./static/images/scenario_stacked_boxes.jpg" alt="Stacked Boxes scenario">
+        <p class="scenario-tag">Execution-aware planning</p>
+        <p class="scenario-name">Stacked Boxes</p>
+        <p class="scenario-desc">A box rests on top of the target.</p>
+      </div>
+      <div class="column is-one-third-tablet is-half-mobile scenario-card">
+        <img src="./static/images/scenario_boxes_aside.jpg" alt="Boxes Aside scenario">
+        <p class="scenario-tag">Execution-aware planning</p>
+        <p class="scenario-name">Boxes Aside</p>
+        <p class="scenario-desc">Objects placed beside the target block its lateral sides.</p>
+      </div>
+      <div class="column is-one-third-tablet is-half-mobile scenario-card">
+        <img src="./static/images/scenario_bottles_on_box.jpg" alt="Bottles on Box scenario">
+        <p class="scenario-tag">Execution-aware planning</p>
+        <p class="scenario-name">Bottles on Box</p>
+        <p class="scenario-desc">Two bottles rest on top of the target.</p>
+      </div>
+      <div class="column is-one-third-tablet is-half-mobile scenario-card">
+        <img src="./static/images/scenario_fragile_box.jpg" alt="Fragile Box scenario">
+        <p class="scenario-tag">Execution-aware planning</p>
+        <p class="scenario-name">Fragile Box</p>
+        <p class="scenario-desc">Obstacles on the target include a fragile box.</p>
+      </div>
+      <div class="column is-one-third-tablet is-half-mobile scenario-card">
+        <img src="./static/images/scenario_long_horizon.jpg" alt="Long Horizon scenario">
+        <p class="scenario-tag">Execution-aware planning</p>
+        <p class="scenario-name">Long Horizon</p>
+        <p class="scenario-desc">Several stacked and adjacent obstacles must be cleared.</p>
+      </div>
+      <div class="column is-one-third-tablet is-half-mobile scenario-card">
+        <img src="./static/images/scenario_scene_update.jpg" alt="Scene Update scenario">
+        <p class="scenario-tag">Dynamic scene adaptation</p>
+        <p class="scenario-name">Scene Update</p>
+        <p class="scenario-desc">Place the ball on the blue box while keeping the top of the white box clear; a bottle placed on the white box during execution violates the plan and triggers replanning.</p>
+      </div>
+      <div class="column is-one-third-tablet is-half-mobile scenario-card">
+        <img src="./static/images/scenario_bottle_failure.jpg" alt="Bottle Failure scenario">
+        <p class="scenario-tag">Execution recovery</p>
+        <p class="scenario-name">Bottle Failure</p>
+        <p class="scenario-desc">Retrieve the bottle under an injected execution failure.</p>
+      </div>
+      <div class="column is-one-third-tablet is-half-mobile scenario-card">
+        <img src="./static/images/scenario_push_failure.jpg" alt="Push Failure scenario">
+        <p class="scenario-tag">Execution recovery</p>
+        <p class="scenario-name">Push Failure</p>
+        <p class="scenario-desc">Retrieve the white box under an injected push failure.</p>
+      </div>
+      <div class="column is-one-third-tablet is-half-mobile scenario-card">
+        <img src="./static/images/scenario_stacked_boxes.jpg" alt="Stacked Boxes w/ Failure scenario">
+        <p class="scenario-tag">Execution recovery</p>
+        <p class="scenario-name">Stacked Boxes w/ Failure</p>
+        <p class="scenario-desc">Same layout as Stacked Boxes, with the grasp of the obstacle systematically prevented.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== RESULTS ============================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Results</h2>
+    <div class="content">
+      <p>
+        We compare three configurations sharing the same VLM backbone, instructions, primitives,
+        and low-level execution: a planner that sees only symbolic object relations with a binary
+        success/failure validator, the execution-aware planner with a binary validator, and the
+        full framework with hierarchical validation. SR is the percentage of the 20 executions
+        completed successfully; Queries is the average number of VLM queries per successful
+        execution.
+      </p>
+    </div>
+
+    <div class="table-container">
+      <table class="table is-narrow is-hoverable results-table">
+        <thead>
+          <tr>
+            <th rowspan="2">Scenario</th>
+            <th colspan="2">Non-execution-aware<br>&amp; binary validation</th>
+            <th colspan="2">Execution-aware<br>&amp; binary validation</th>
+            <th colspan="2">Execution-aware<br>&amp; hierarchical validation (ours)</th>
+          </tr>
+          <tr>
+            <th>SR</th><th>Queries</th>
+            <th>SR</th><th>Queries</th>
+            <th>SR</th><th>Queries</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="group-row"><td colspan="7">Execution-aware planning</td></tr>
+          <tr><td>Stacked Boxes</td><td>100%</td><td>8.2</td><td>100%</td><td>8.2</td><td class="ours">100%</td><td class="ours">8.2</td></tr>
+          <tr><td>Boxes Aside</td><td>0%</td><td>&ndash;</td><td>75%</td><td>12.3</td><td class="ours">85%</td><td class="ours">11.8</td></tr>
+          <tr><td>Bottles on Box</td><td>70%</td><td>9.6</td><td>90%</td><td>9.4</td><td class="ours">95%</td><td class="ours">9.4</td></tr>
+          <tr><td>Fragile Box</td><td>0%</td><td>&ndash;</td><td>70%</td><td>11.7</td><td class="ours">70%</td><td class="ours">11.5</td></tr>
+          <tr><td>Long Horizon</td><td>0%</td><td>&ndash;</td><td>35%</td><td>24.3</td><td class="ours">50%</td><td class="ours">21.1</td></tr>
+          <tr class="group-row"><td colspan="7">Dynamic scene adaptation</td></tr>
+          <tr><td>Scene Update</td><td>85%</td><td>14.6</td><td>85%</td><td>14.6</td><td class="ours">85%</td><td class="ours">14.4</td></tr>
+          <tr class="group-row"><td colspan="7">Execution recovery</td></tr>
+          <tr><td>Bottle Failure</td><td>90%</td><td>10</td><td>90%</td><td>10</td><td class="ours">90%</td><td class="ours">8.1</td></tr>
+          <tr><td>Push Failure</td><td>15%</td><td>10</td><td>85%</td><td>10</td><td class="ours">95%</td><td class="ours">9.1</td></tr>
+          <tr><td>Stacked Boxes w/ Failure</td><td>90%</td><td>12</td><td>90%</td><td>12</td><td class="ours">90%</td><td class="ours">12</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="content mt-5">
+      <ul class="findings">
+        <li>
+          <strong>Execution awareness matters when obstruction is lateral.</strong> With side-by-side
+          objects (Boxes Aside, Fragile Box, Long Horizon), symbolic relations cannot tell whether the
+          free space suffices for the end-effector, and the non-execution-aware planner fails in all
+          executions. Encoding side-level accessibility and reachability raises success to 85%, 70%,
+          and 50%.
+        </li>
+        <li>
+          <strong>Hierarchical validation makes recovery cheaper.</strong> A binary validator must
+          always replan after a failure. Interpreting the failure allows the least disruptive
+          recovery, reducing the average queries from 10 to 8.1 in Bottle Failure (repeat) and from
+          10 to 9.1 in Push Failure (modify).
+        </li>
+        <li>
+          <strong>Parallel scheduling shortens execution.</strong> Grouping compatible actions into
+          bimanual stages reduces robot execution time by 40% in Bottles on Box and by 11% in Long
+          Horizon, while preserving task completion.
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== BIBTEX ============================== -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3">BibTeX</h2>
+    <!-- TODO: complete with the final authors, venue and year. -->
+    <pre class="bibtex"><code>@inproceedings{TODO,
+  title     = {Bridging Task Planning and Execution for Language-Conditioned Bimanual Manipulation},
+  author    = {TODO},
+  booktitle = {TODO},
+  year      = {2026}
+}</code></pre>
+  </div>
+</section>
+
+<!-- ============================== FOOTER ============================== -->
+<footer class="footer">
+  <div class="container is-max-desktop">
+    <div class="content has-text-centered">
+      <p>
+        This website is licensed under a
+        <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons
+        Attribution-ShareAlike 4.0 International License</a>.
+        Template adapted from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+      </p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
